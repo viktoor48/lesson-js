@@ -597,3 +597,4 @@ function loadAndSortTowns(url) {
 let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
 loadAndSortTowns(url).then(towns => console.log(towns));
  */
+

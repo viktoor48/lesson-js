@@ -5,38 +5,74 @@
     <title>Title</title>
 </head>
 <body>
-    <button id="myButton">Загрузить</button>
-    <div id="result"></div>
-  <script>
+<div id="homeworkContainer">
+    <div id="loading-block">Загрузка...</div>
+    <div id="filter-block" style="display: none;">
+        <input type="text" placeholder="название города" id="filter-input">
 
-      // let myButton = document.querySelector('#myButton');
-      // let result = document.querySelector('#result');
-      //
-      // myButton.addEventListener('click', evt => {
-      //    fetch('content.json')
-      //     .then(response => {
-      //         if (response.status >= 400){
-      //             return Promise.reject();
-      //         }
-      //         return response.json();
-      //     })
-      //        .then(friends => {
-      //            result.innerHTML = '';
-      //            for (let friend of friends) {
-      //                let friendNode = createFriendDom(friend);
-      //                result.appendChild(friendNode);
-      //            }
-      //        })
-      //     .catch(() => console.log('Что-то пошло не так'));
-      // });
-      //
-      // function createFriendDom(friend){
-      //     let div = document.createElement('DIV');
-      //     div.classList.add('friend');
-      //     div.innerText = `${friend.name} ${friend.lastName}`;
-      //     return div;
-      // }
-  </script>
-  <script src="js.js"></script>
+        <div id="filter-result"></div>
+    </div>
+</div>
+
+<script>
+    const homeworkContainer = document.querySelector('#homework-container');
+    function loadTowns() {
+        return fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+            .then(response => {
+                if (response.status >= 400) {
+                    console.log('status >= 400');
+                    return Promise.reject();
+                }
+
+                return response.json();
+            })
+            .then(towns => {
+                return towns.sort((a, b) => {
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    if (a.name < b.name) {
+                        return -1;
+                    }
+
+                    return 0;
+                });
+            })
+            .catch(() => console.log('Не удалось загрузить города'))
+    }
+
+    function isMatching(full, chunk) {
+        if (full.toLowerCase().includes(chunk.toLowerCase())) {
+            return true
+        }
+
+        return false;
+    }
+
+    /* Блок с надписью "Загрузка" */
+    const loadingBlock = document.querySelector('#loading-block');
+    /* Блок с текстовым полем и результатом поиска */
+    const filterBlock = document.querySelector('#filter-block');
+    /* Текстовое поле для поиска по городам */
+    const filterInput = document.querySelector('#filter-input');
+    /* Блок с результатами поиска */
+    const filterResult = document.querySelector('#filter-result');
+
+    let cities = [];
+    loadTowns()
+    .then(towns => {
+        cities = towns;
+    })
+    .then(() => {
+        loadingBlock.style.display = 'none';
+        filterBlock.style.display = 'block';
+    })
+
+    filterInput.addEventListener('keyup', function(event) {
+        // это обработчик нажатия кливиш в текстовом поле
+        filterResult.innerHTML = Array.from(cities.filter(item => isMatching(item.name, filterInput.value)), item => item.name);
+    });
+</script>
+<script src="js.js"></script>
 </body>
 </html>
