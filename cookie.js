@@ -56,8 +56,9 @@ console.log('Cookie',cookies);
 
 for (let key in cookies) {
     console.log(`${key} ${cookies[key]}`);
+    listTable.innerHTML += `<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete">Удалить</button></th></tr>`;
+    //listTable.append(`<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete">Удалить</button></th></tr>`);
 }
-
 
 
 filterNameInput.addEventListener('keyup', function() {
