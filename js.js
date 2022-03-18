@@ -659,13 +659,28 @@ filterInput.addEventListener('keyup', function(event) {
 });
 */
 
-let array = ['someName=someValue','otherName=otherValue','city=moscow'];
+//localstorage
+/*
+ let name = document.querySelector('#name');
+    let about = document.querySelector('#about');
+    let btnSave = document.querySelector('#save');
+    let btnLoad = document.querySelector('#load');
 
-console.log('Функция возвращает: ',array.reduce((prev,current) => {
-    let [name,value] = current.split('=');
-    prev[name] = value;
-    return prev;
-},{}));
+    let storage = localStorage;
+
+    btnSave.addEventListener('click',function (){
+       storage.data = JSON.stringify({
+           name: name.value,
+           about: about.value
+       } || '{}');
+    });
+
+    btnLoad.addEventListener('click',function (){
+        let data = JSON.parse(storage.data || '{}');
+        name.value = data.name || '';
+        about.value = data.about || '';
+    });
+ */
 
 function parseCookie() {
      return document.cookie.split('; ').reduce((prev,current) => {

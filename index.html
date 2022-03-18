@@ -3,58 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        .container{
-            max-width: 1200px;
-        }
-        .wrapper{
-            display: flex;
-            flex-direction: column;
-            /*justify-content: center;*/
-            width: 300px;
-            margin: 0 auto;
-        }
-        input{
-            margin-bottom: 10px;
-        }
-        button{
-            margin: 8px 0 5px 0;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="wrapper">
-            <label>ФИО</label>
-            <input type="text" id="name">
-            <label>О себе</label>
-            <textarea id="about" cols="25" rows="5"></textarea>
-            <button id="save">Сохранить</button>
-            <button id="load">Загрузить</button>
-        </div>
+<div id="homework-container">
+    <div id="filter-block">
+        Поиск cookie: <input type="text" id="filter-name-input" placeholder="имя cookie">
+    </div>
+    <hr>
+    <div id="add-block">
+        Добавить cookie:<br>
+        <input type="text" id="add-name-input" placeholder="имя cookie"><br>
+        <input type="text" id="add-value-input" placeholder="значение cookie"><br>
+        <button id="add-button">добавить cookie</button>
+    </div>
+    <hr>
+    <div id="list-block">
+        Доступные cookie:
+        <table id="list-table">
+            <thead>
+            <tr>
+                <th>имя</th>
+                <th>значение</th>
+                <th>удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- tr добавлять сюда -->
+            <tr>
+                <th>name</th>
+                <th>value</th>
+                <th>delete</th>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
+</div>
+
 <script>
-    let name = document.querySelector('#name');
-    let about = document.querySelector('#about');
-    let btnSave = document.querySelector('#save');
-    let btnLoad = document.querySelector('#load');
 
-    let storage = localStorage;
-
-    btnSave.addEventListener('click',function (){
-       storage.data = JSON.stringify({
-           name: name.value,
-           about: about.value
-       } || '{}');
-    });
-
-    btnLoad.addEventListener('click',function (){
-        let data = JSON.parse(storage.data || '{}');
-        name.value = data.name || '';
-        about.value = data.about || '';
-    });
 </script>
 <script src="js.js"></script>
+<script src="cookie.js"></script>
 </body>
 </html>
