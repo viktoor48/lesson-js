@@ -598,3 +598,79 @@ let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.j
 loadAndSortTowns(url).then(towns => console.log(towns));
  */
 
+//Фильтрация городов
+/*
+const homeworkContainer = document.querySelector('#homework-container');
+    function loadTowns() {
+        return fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+            .then(response => {
+                if (response.status >= 400) {
+                    console.log('status >= 400');
+                    return Promise.reject();
+                }
+
+                return response.json();
+            })
+            .then(towns => {
+                return towns.sort((a, b) => {
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    if (a.name < b.name) {
+                        return -1;
+                    }
+
+                    return 0;
+                });
+            })
+            .catch(() => console.log('Не удалось загрузить города'))
+    }
+
+    function isMatching(full, chunk) {
+        if (full.toLowerCase().includes(chunk.toLowerCase())) {
+            return true
+        }
+
+        return false;
+    }
+
+// Блок с надписью "Загрузка"
+const loadingBlock = document.querySelector('#loading-block');
+// Блок с текстовым полем и результатом поиска
+const filterBlock = document.querySelector('#filter-block');
+//Текстовое поле для поиска по городам
+const filterInput = document.querySelector('#filter-input');
+// Блок с результатами поиска
+const filterResult = document.querySelector('#filter-result');
+
+let cities = [];
+loadTowns()
+    .then(towns => {
+        cities = towns;
+    })
+    .then(() => {
+        loadingBlock.style.display = 'none';
+        filterBlock.style.display = 'block';
+    })
+
+filterInput.addEventListener('keyup', function(event) {
+    // это обработчик нажатия кливиш в текстовом поле
+    filterResult.innerHTML = Array.from(cities.filter(item => isMatching(item.name, filterInput.value)), item => item.name);
+});
+*/
+
+let array = ['someName=someValue','otherName=otherValue','city=moscow'];
+
+console.log('Функция возвращает: ',array.reduce((prev,current) => {
+    let [name,value] = current.split('=');
+    prev[name] = value;
+    return prev;
+},{}));
+
+function parseCookie() {
+     return document.cookie.split('; ').reduce((prev,current) => {
+        let [name,value] = current.split('=');
+        prev[name] = value;
+        return prev;
+    },{});
+}

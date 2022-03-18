@@ -3,74 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .container{
+            max-width: 1200px;
+        }
+        .wrapper{
+            display: flex;
+            flex-direction: column;
+            /*justify-content: center;*/
+            width: 300px;
+            margin: 0 auto;
+        }
+        input{
+            margin-bottom: 10px;
+        }
+        button{
+            margin: 8px 0 5px 0;
+        }
+    </style>
 </head>
 <body>
-<div id="homeworkContainer">
-    <div id="loading-block">Загрузка...</div>
-    <div id="filter-block" style="display: none;">
-        <input type="text" placeholder="название города" id="filter-input">
-
-        <div id="filter-result"></div>
+    <div class="container">
+        <div class="wrapper">
+            <label>ФИО</label>
+            <input type="text" id="name">
+            <label>О себе</label>
+            <textarea id="about" cols="25" rows="5"></textarea>
+            <button id="save">Сохранить</button>
+            <button id="load">Загрузить</button>
+        </div>
     </div>
-</div>
 
 <script>
-    const homeworkContainer = document.querySelector('#homework-container');
-    function loadTowns() {
-        return fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-            .then(response => {
-                if (response.status >= 400) {
-                    console.log('status >= 400');
-                    return Promise.reject();
-                }
+    let name = document.querySelector('#name');
+    let about = document.querySelector('#about');
+    let btnSave = document.querySelector('#save');
+    let btnLoad = document.querySelector('#load');
 
-                return response.json();
-            })
-            .then(towns => {
-                return towns.sort((a, b) => {
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    if (a.name < b.name) {
-                        return -1;
-                    }
+    let storage = localStorage;
 
-                    return 0;
-                });
-            })
-            .catch(() => console.log('Не удалось загрузить города'))
-    }
+    btnSave.addEventListener('click',function (){
+       storage.data = JSON.stringify({
+           name: name.value,
+           about: about.value
+       } || '{}');
+    });
 
-    function isMatching(full, chunk) {
-        if (full.toLowerCase().includes(chunk.toLowerCase())) {
-            return true
-        }
-
-        return false;
-    }
-
-    /* Блок с надписью "Загрузка" */
-    const loadingBlock = document.querySelector('#loading-block');
-    /* Блок с текстовым полем и результатом поиска */
-    const filterBlock = document.querySelector('#filter-block');
-    /* Текстовое поле для поиска по городам */
-    const filterInput = document.querySelector('#filter-input');
-    /* Блок с результатами поиска */
-    const filterResult = document.querySelector('#filter-result');
-
-    let cities = [];
-    loadTowns()
-    .then(towns => {
-        cities = towns;
-    })
-    .then(() => {
-        loadingBlock.style.display = 'none';
-        filterBlock.style.display = 'block';
-    })
-
-    filterInput.addEventListener('keyup', function(event) {
-        // это обработчик нажатия кливиш в текстовом поле
-        filterResult.innerHTML = Array.from(cities.filter(item => isMatching(item.name, filterInput.value)), item => item.name);
+    btnLoad.addEventListener('click',function (){
+        let data = JSON.parse(storage.data || '{}');
+        name.value = data.name || '';
+        about.value = data.about || '';
     });
 </script>
 <script src="js.js"></script>
