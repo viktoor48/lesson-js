@@ -46,12 +46,13 @@ const listTable = document.querySelector('#list-table tbody');
 renderCookie();
 
 listTable.addEventListener('click', function (event) {
-   let target = event.target;
+   let target = event.target.closest('th');
 
-   if (target.tagName = 'TR'){
-       target.style.backgroundColor = 'red';
-       console.log(target);
-   }
+
+   // if (target.tagName = 'BUTTON'){
+   //     target.style.backgroundColor = 'red';
+   //     console.log(target);
+   // }
    //взять значение куки и передать ее в функцию удаления
     //вызвать функцию рендера
 });
