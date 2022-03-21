@@ -43,6 +43,19 @@ const addButton = document.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = document.querySelector('#list-table tbody');
 
+renderCookie();
+
+listTable.addEventListener('click', function (event) {
+   let target = event.target;
+
+   if (target.tagName = 'TR'){
+       target.style.backgroundColor = 'red';
+       console.log(target);
+   }
+   //взять значение куки и передать ее в функцию удаления
+    //вызвать функцию рендера
+});
+
 function parseCookie() {
      return document.cookie.split('; ').reduce((prev,current) => {
         let [name,value] = current.split('=');
@@ -51,15 +64,17 @@ function parseCookie() {
     },{});
 }
 
-let cookies = parseCookie();
-console.log('Cookie',cookies);
+function renderCookie(){
+    let cookies = parseCookie();
+    console.log('Cookie',cookies);
 
-for (let key in cookies) {
-    console.log(`${key} ${cookies[key]}`);
-    listTable.innerHTML += `<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete">Удалить</button></th></tr>`;
-    //listTable.append(`<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete">Удалить</button></th></tr>`);
+    for (let key in cookies) {
+        console.log(`${key} ${cookies[key]}`);
+        listTable.innerHTML += `<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete">Удалить</button></th></tr>`;
+    }
+    // кнопка "удалить cookie"
+    const deleteButton = document.querySelector('#delete');
 }
-
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
@@ -67,4 +82,14 @@ filterNameInput.addEventListener('keyup', function() {
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
+});
+
+addButton.addEventListener('click', function (){
+   let nameCookie = addNameInput.value;
+   let valueCookie = addValueInput.value;
+   document.cookie = `${nameCookie}=${valueCookie}`;
+   addNameInput.value = '';
+   addValueInput.value = '';
+   listTable.innerHTML = '';
+   renderCookie();
 });
