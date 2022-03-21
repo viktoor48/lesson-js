@@ -46,15 +46,10 @@ const listTable = document.querySelector('#list-table tbody');
 renderCookie();
 
 listTable.addEventListener('click', function (event) {
-   let target = event.target.closest('th');
-
-
-   // if (target.tagName = 'BUTTON'){
-   //     target.style.backgroundColor = 'red';
-   //     console.log(target);
-   // }
-   //взять значение куки и передать ее в функцию удаления
-    //вызвать функцию рендера
+    if (event.target.dataset.key){
+        document.cookie = `${event.target.dataset.key}=; path=/; max-age=0`;
+        renderCookie();
+    }
 });
 
 function parseCookie() {
@@ -68,29 +63,36 @@ function parseCookie() {
 function renderCookie(){
     let cookies = parseCookie();
     console.log('Cookie',cookies);
+    listTable.innerHTML = '';
 
     for (let key in cookies) {
         console.log(`${key} ${cookies[key]}`);
-        listTable.innerHTML += `<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete">Удалить</button></th></tr>`;
+        if (isMatching(key,filterNameInput.value) || isMatching(cookies[key], filterNameInput.value)){
+            listTable.innerHTML += `<tr><th>${key}</th><th>${cookies[key]}</th><th><button id="delete" data-key="${key}">Удалить</button></th></tr>`;
+        }
     }
-    // кнопка "удалить cookie"
-    const deleteButton = document.querySelector('#delete');
+}
+
+function isMatching(full, chunk) {
+    if (full.toLowerCase().includes(chunk.toLowerCase())) {
+        return true
+    }
+
+    return false;
 }
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+    renderCookie();
 });
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
-});
-
-addButton.addEventListener('click', function (){
-   let nameCookie = addNameInput.value;
-   let valueCookie = addValueInput.value;
-   document.cookie = `${nameCookie}=${valueCookie}`;
-   addNameInput.value = '';
-   addValueInput.value = '';
-   listTable.innerHTML = '';
-   renderCookie();
+    let nameCookie = addNameInput.value;
+    let valueCookie = addValueInput.value;
+    document.cookie = `${nameCookie}=${valueCookie}; path=/;`;
+    addNameInput.value = '';
+    addValueInput.value = '';
+    listTable.innerHTML = '';
+    renderCookie();
 });
