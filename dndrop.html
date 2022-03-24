@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dnd</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <style>
+        .container{
+            display: flex;
+            padding: 30px;
+            height: 500px;
+        }
+        .source, .target{
+            display: flex;
+            flex-basis: 50%;
+            flex-wrap: wrap;
+            align-content: start;
+            padding: 15px;
+            border: 3px dashed #b3b3b3;
+            border-radius: 10px;
+        }
+        .source{
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .target{
+            border-left: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .item, .new-item{
+            margin: 0 10px 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: hsla(0,0%,40%,1);
+        }
+        .item, .new-item{
+            border: 2px dashed #783db3;
+            border-radius: 10px;
+            height: 50px;
+            width: 50px;
+            cursor: move;
+            user-select: none;
+        }
+        .new-item{
+            cursor: pointer;
+            border: 2px dashed #b3b3b3;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body class="container text-center">
+    <div class="container">
+        <div class="source">
+            <div class="new-item">+</div>
+        </div>
+        <div class="target">
+            <div class="new-item">+</div>
+        </div>
+    </div>
+
+    <script>
+        const source = document.querySelector('.source');
+        const target = document.querySelector('.target');
+        let counter = 0;
+
+        makeDnd([source,target]);
+
+        document.addEventListener('click',function (e){
+           if (e.target.classList.contains('new-item')){
+                const newItem = createItem();
+                const zone = e.target.parentNode;
+
+                zone.insertBefore(newItem, zone.lastElementChild);
+           }
+        });
+        
+        function createItem(background) {
+            const newDiv = document.createElement('div');
+            counter++;
+
+            if (background) {
+                newDiv.style.background = `url(${background})`;
+                newDiv.style.backgroundSize = `cover`;
+            } else {
+                newDiv.textContent = counter;
+            }
+            newDiv.classList.add('item');
+            newDiv.draggable = true;
+
+            return newDiv;
+        }
+
+        function makeDnd(zone) {
+            let currentDrag;
+
+            zone.forEach(zone => {
+              zone.addEventListener('dragstart', function (e) {
+                  e.dataTransfer.setData('text/html','dragstart');
+                  currentDrag = {source: zone, node: e.target};
+              });
+
+              zone.addEventListener('dragover', function (e) {
+                  e.preventDefault();
+              });
+
+              zone.addEventListener('drop', function (e) {
+                  if (currentDrag){
+                      e.preventDefault();
+
+                      if (currentDrag.source !== zone) {
+                          console.log(e.type, e.target);
+                          if (e.target.classList.contains('item')) {
+                              zone.insertBefore(currentDrag.node, e.target.nextElementSibling);
+                          } else {
+                              zone.insertBefore(currentDrag.node, zone.lastElementChild);
+                          }
+                      } else {
+                          console.log(e.type, e.target);
+                          if (e.target.classList.contains('item')) {
+                              zone.insertBefore(currentDrag.node, e.target.nextElementSibling);
+                          }
+                      }
+
+                      currentDrag = null;
+                  } else {
+                      const dt = e.dataTransfer;
+
+                      if (dt.files && dt.files.length) {
+                          const fd = new FormData();
+
+                          for (let file of dt.files) {
+                              fd.append('files', file);
+
+                              let reader = new FileReader();
+
+                              reader.readAsDataURL(file);
+                              reader.addEventListener('load', function () {
+                                 let item = createItem(reader.result);
+                                 zone.insertBefore(item, e.target.lastElementChild);
+                              });
+                          }
+
+                          fetch('/bar', {method: 'POST', body: fd});
+                      }
+                  }
+              });
+            })
+        }
+    </script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+</body>
+</html>
