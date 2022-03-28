@@ -3,57 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        *{
-            box-sizing: border-box;
-        }
-        p{
-            margin: 0;
-        }
-        .balloon{
-            height: 530px;
-            width: 380px;
-            background-color: grey;
-            border-radius: 8px;
-        }
-        .header__balloon{
-            /*display: flex;
-            align-items: center;*/
-            height: 42px;
-            background-color: #ff8663;
-            border-radius: 8px 8px 0 0;
-            width: 100%;
-        }
-        .header__balloon p{
-            display: inline-block;
-            color: white;
-            margin-left: 5px;
-        }
-        .header__balloon .geo{
-            position: relative;
-            top: 1px;
-        }
-        .close{
-            margin-left: auto;
-        }
-        .wrapper{
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-        }
-        .input-textarea{
-            border: 1px solid #ffffff;
-            padding: 10px 15px;
-            color: #ffffff;
-            font-family: "Roboto Mono", monospace;
-            font-size: 17px;
-            font-weight: 300;
-            resize: none;
-            overflow-x: hidden;
-            width: 100%;
-            height: 152px;
-        }
-    </style>
+    <link rel="stylesheet" href="balloon.css">
 </head>
 <body>
     <div class="balloon">
@@ -61,13 +11,23 @@
             <div class="wrapper">
                 <div>
                     <img class="geo" src="image/geo.png" alt="">
-                    <p>Невский пр., 78, Санкт-Петербург, 191025</p>
+                    <p class="head-address">Невский пр., 78, Санкт-Петербург, 191025</p>
                 </div>
                 <img class="close" src="image/close.png">
             </div>
         </div>
         <div class="main">
-            <textarea class="input-textarea" name="reviews" id="" readonly></textarea>
+            <textarea class="input-textarea output" id="reviews-output" readonly></textarea>
+            <div class="line"></div>
+            <div class="reviews">
+                <h3 class="orange-text">Ваш отзыв</h3>
+                <input class="input-text" id="name" placeholder="Ваше имя" type="text">
+                <input class="input-text" id="reviews" placeholder="Ваш отзыв" type="text">
+                <textarea class="input-textarea" id="input-impression" placeholder="Поделитесь впечатлениями" name=""></textarea>
+                <div class="btn-block">
+                    <button class="btn" id="button-add" >Добавить</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
